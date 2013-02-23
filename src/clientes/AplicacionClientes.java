@@ -1,36 +1,36 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package clientes;
 
-/**
- *
- * @author theasker
- */
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class AplicacionClientes {
 
-  /**
-   * @param args the command line arguments
-   */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+    // instanciamos la clase de solicitudes por teclado
     Solicitudes pide = new Solicitudes();
+    // comprobamos que existe el fichero
+    pide.existeFile();
+    
+    // Se ejecuta hasa que introducimos un 0
     int opcion = 0;
-    do{ // Se ejecuta hasa que introducimos un 0
+    do{ 
       try{
-        opcion = Integer.parseInt(pide.menu()); // Mostramos el menu
+        // Mostramos el menu
+        opcion = Integer.parseInt(pide.menu());
       }catch (NumberFormatException nfe){ 
-        System.err.println("Sólo valores entre 0 y 9 carácteres no");
+        System.err.println("Sólo valores entre 0 y 5 carácteres no");
         opcion = 10;
       }
       switch (opcion){
         case 0:
           break;
         case 1:
-          
+          pide.addCliente();
           break;
         case 2:
-          
+          pide.verLista();
           break;
         case 3:
           
@@ -42,7 +42,7 @@ public class AplicacionClientes {
           
           break;
         default:
-          System.out.println("Introduzca un valor entre 0 y 10");
+          System.out.println("Introduzca un valor entre 0 y 5");
       }
     }while(opcion != 0);
   }

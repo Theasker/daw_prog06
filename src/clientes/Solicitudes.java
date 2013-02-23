@@ -1,17 +1,51 @@
-/*
- * Clase donde solicitaremos por teclado todo lo necesario
- */
 package clientes;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Scanner;
 
-/**
- *
- * @author theasker
- */
+/*  Se trata de hacer una aplicación en Java que gestione los clientes de una empresa. Esos datos, se almacenarán en un fichero serializado, denominado clientes.dat.
+
+Los datos que se almacenarán sobre cada cliente son:
+
+    NIF.
+    Nombre.
+    Teléfono.
+    Dirección.
+    Deuda.
+
+Mediante un menú se podrán realizar determinadas operaciones:
+
+    Añadir cliente. Esta opción pedirá los datos del cliente y añadirá el registro correspondiente en el fichero.
+    Listar clientes. Recorrerá el fichero mostrando los clientes almacenados en el mismo.
+    Buscar clientes. Pedirá al usuario el nif del cliente a buscar, y comprobará si existe en el fichero.
+    Borrar cliente. Pedirá al usuario el nif del cliente a borrar, y si existe, lo borrará del fichero.
+    Borrar fichero de clientes completamente. Elimina del disco el fichero clientes.dat
+    Salir de la aplicación.
+
+  */
 public class Solicitudes {
   Scanner leer = new Scanner(System.in);
-  public String menu(){
+  
+  // creamos una lista para añadir clientes
+  ArrayList listaDeObjetosCliente = new ArrayList();
+  /* instancio la serializadora para leer y escribir 
+       la lista de objetos Cliente */
+  Serializadora serializar = new Serializadora();
+  
+  // comprobamos que existe para cargar los datos del fichero
+  public void existeFile() throws FileNotFoundException, IOException, ClassNotFoundException{    
+    File fich = new File("Clientes.dat");
+    if (fich.exists()){
+      listaDeObjetosCliente = (ArrayList) serializar.leerObjeto("Clientes.dat");    
+    }
+  }
+  
+  public String menu(){   
     System.out.println("Operaciones con clientes");
     System.out.println("========================");
     System.out.println("1 - Añadir clientes");
@@ -22,24 +56,97 @@ public class Solicitudes {
     System.out.println("0 - Salir de la aplicación");
     System.out.println("--------------------");
     System.out.println("  Introduce una opción:");
-    String opcion = leer.next();
+    String opcion = leer.nextLine();
     return opcion;
   }
-  
-  public String pedirTexto(){
-    try{
-      
-    }catch 
+  public void addCliente() throws FileNotFoundException, IOException{    
+    // instanciamos el objeto cliente
+    Cliente cliente = new Cliente();
+    //cliente.setNif(this.pedirNIF());
+    cliente.setNombre(this.pedirNombre());
+    //cliente.setDireccion(this.pedirDireccion());
+    //cliente.setTelefono(this.pedirTelefono());
+    //cliente.setDeuda(this.pedirDeuda());
+    listaDeObjetosCliente.add(cliente);
+    serializar.escribirObjeto(listaDeObjetosCliente);
+  }  
+  private String pedirNIF(){
+    String nif;
+    do{
+      System.out.println("Introduce el NIF/DNI (9 caracteres):");
+      nif = leer.nextLine();
+      if (nif.length() < 8 || nif.length() > 9){
+        System.out.println("NIF/DNI no tiene la longitud necesaria (9 caracteres)");
+        nif = null;
+      }
+    }while(nif == null);
+    return nif;
+  }
+  private String pedirNombre(){
+    String nombre;
+    do{
+      System.out.println("Introduce el nombre del cliente (5-50):");
+      nombre = leer.nextLine();
+      if (nombre.length() < 5 || nombre.length() > 50){
+        System.out.println("La longitud del nombre no es correcta (5-50)");
+        nombre = null;
+      }
+    }while (nombre == null);
+    return nombre;
+  }
+  private String pedirDireccion(){
+    String direccion = null;
+    do{
+      System.out.println("Introduce la dirección (10-100):");
+      direccion = leer.nextLine();
+      if (direccion.length() < 10 || direccion.length() > 100){
+        System.out.println("La longitud de la dirección no es correcta (10-100)");
+        direccion = null;
+      }
+    }while (direccion == null);
+    return direccion;
+  }
+  private String pedirTelefono(){
+    String numero = null;
+    do{
+      System.out.println("Introduce un número de telefono (9 digitos):");
+      numero = leer.nextLine();
+      try{
+        if (numero.length() != 9){
+          System.out.println("El número no tiene tamaño 9");
+          numero = null;
+        }else{ // tiene tamaño 9
+          Integer.parseInt(numero);
+        }
+      }catch (NumberFormatException nfe){
+        System.out.println("Lo que has introducido no son dígitos");
+        numero = null;
+      }
+    }while(numero == null);
+    return numero;
+  }
+  private double pedirDeuda(){
+    String numero;
+    do{
+      System.out.println("Introduce una cantidad:");
+      numero = leer.nextLine();
+      try{
+        Double.parseDouble(numero);
+      }catch (NumberFormatException nfe){
+        System.out.println("No es una cantidad correcta");
+        numero = null;
+      }
+    }while (numero == null);
     
-    return texto;
+    return Double.parseDouble(numero);
   }
   
-  public String alta(){
-    String cliente = null;
-    System.out.println("Introduce nombre o razón social del cliente:");
-    
-    
-    return cliente;
+  public void verLista(){
+    ListIterator iterador;
+    iterador = listaDeObjetosCliente.listIterator();
+    while(iterador.hasNext()){
+      Cliente cliente = (Cliente) iterador.next();
+      System.out.println(cliente.getNombre());
+    }
   }
-  
 }
