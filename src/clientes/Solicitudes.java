@@ -31,19 +31,11 @@ Mediante un menú se podrán realizar determinadas operaciones:
 public class Solicitudes {
   Scanner leer = new Scanner(System.in);
   
-  // creamos una lista para añadir clientes
-  ArrayList listaDeObjetosCliente = new ArrayList();
-  /* instancio la serializadora para leer y escribir 
-       la lista de objetos Cliente */
-  Serializadora serializar = new Serializadora();
   
-  // comprobamos que existe para cargar los datos del fichero
-  public void existeFile() throws FileNotFoundException, IOException, ClassNotFoundException{    
-    File fich = new File("Clientes.dat");
-    if (fich.exists()){
-      listaDeObjetosCliente = (ArrayList) serializar.leerObjeto("Clientes.dat");    
-    }
-  }
+  
+  
+ 
+  
   
   public String menu(){   
     System.out.println("Operaciones con clientes");
@@ -60,17 +52,11 @@ public class Solicitudes {
     return opcion;
   }
   public void addCliente() throws FileNotFoundException, IOException{    
-    // instanciamos el objeto cliente
-    Cliente cliente = new Cliente();
-    //cliente.setNif(this.pedirNIF());
-    cliente.setNombre(this.pedirNombre());
-    //cliente.setDireccion(this.pedirDireccion());
-    //cliente.setTelefono(this.pedirTelefono());
-    //cliente.setDeuda(this.pedirDeuda());
-    listaDeObjetosCliente.add(cliente);
-    serializar.escribirObjeto(listaDeObjetosCliente);
+    
+    
+    
   }  
-  private String pedirNIF(){
+  public String pedirNIF(){
     String nif;
     do{
       System.out.println("Introduce el NIF/DNI (9 caracteres):");
@@ -82,7 +68,7 @@ public class Solicitudes {
     }while(nif == null);
     return nif;
   }
-  private String pedirNombre(){
+  public String pedirNombre(){
     String nombre;
     do{
       System.out.println("Introduce el nombre del cliente (5-50):");
@@ -94,7 +80,7 @@ public class Solicitudes {
     }while (nombre == null);
     return nombre;
   }
-  private String pedirDireccion(){
+  public String pedirDireccion(){
     String direccion = null;
     do{
       System.out.println("Introduce la dirección (10-100):");
@@ -106,7 +92,7 @@ public class Solicitudes {
     }while (direccion == null);
     return direccion;
   }
-  private String pedirTelefono(){
+  public String pedirTelefono(){
     String numero = null;
     do{
       System.out.println("Introduce un número de telefono (9 digitos):");
@@ -125,7 +111,7 @@ public class Solicitudes {
     }while(numero == null);
     return numero;
   }
-  private double pedirDeuda(){
+  public double pedirDeuda(){
     String numero;
     do{
       System.out.println("Introduce una cantidad:");
@@ -141,9 +127,9 @@ public class Solicitudes {
     return Double.parseDouble(numero);
   }
   
-  public void verLista(){
+  public void verLista(List lista){
     ListIterator iterador;
-    iterador = listaDeObjetosCliente.listIterator();
+    iterador = lista.listIterator();
     while(iterador.hasNext()){
       Cliente cliente = (Cliente) iterador.next();
       System.out.println(cliente.getNombre());
