@@ -60,23 +60,24 @@ public class AplicacionClientes {
       }
       switch (opcion){
         case 0:
-          break;
-        case 1:
-          Cliente cliente = new Cliente();
           try {
-            // creamos un nuevo objeto cliente
-            cliente.setNif(pide.pedirNIF());
-            cliente.setNombre(pide.pedirNombre());
-            cliente.setDireccion(pide.pedirDireccion());
-            cliente.setTelefono(pide.pedirTelefono());
-            cliente.setDeuda(pide.pedirDeuda());
-            listaDeObjetosCliente.add(cliente);
             serializar.escribirObjeto(listaDeObjetosCliente);
           } catch (FileNotFoundException ex) {
             System.err.println("No existe el fichero");
           } catch (IOException ex) {
             System.err.println("Error de clase");
           }
+          break;
+        case 1:
+          Cliente cliente = new Cliente();
+          // creamos un nuevo objeto cliente
+          cliente.setNif(pide.pedirNIF());
+          cliente.setNombre(pide.pedirNombre());
+          cliente.setDireccion(pide.pedirDireccion());
+          cliente.setTelefono(pide.pedirTelefono());
+          cliente.setDeuda(pide.pedirDeuda());
+          listaDeObjetosCliente.add(cliente);
+          //serializar.escribirObjeto(listaDeObjetosCliente);
           break;
         case 2:
           pide.verLista(listaDeObjetosCliente);
@@ -85,14 +86,9 @@ public class AplicacionClientes {
           pide.buscarNIF(listaDeObjetosCliente, pide.pedirNIF());
           break;
         case 4:
-          try {
-            // borramos el registro y devuelve la lista para poderla guardar
-            serializar.escribirObjeto(pide.borrarNIF(listaDeObjetosCliente, pide.pedirNIF()));
-          } catch (FileNotFoundException ex) {
-            System.err.println("No existe el fichero");
-          } catch (IOException ex) {
-            System.err.println("Error de clase");
-          }
+          // borramos el registro y devuelve la lista para poderla guardar
+          pide.borrarNIF(listaDeObjetosCliente, pide.pedirNIF());
+
           //pide.borrarNIF(listaDeObjetosCliente, pide.pedirNIF());
           break;
         case 5:
