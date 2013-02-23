@@ -1,41 +1,12 @@
 package clientes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Scanner;
 
-/*  Se trata de hacer una aplicación en Java que gestione los clientes de una empresa. Esos datos, se almacenarán en un fichero serializado, denominado clientes.dat.
-
-Los datos que se almacenarán sobre cada cliente son:
-
-    NIF.
-    Nombre.
-    Teléfono.
-    Dirección.
-    Deuda.
-
-Mediante un menú se podrán realizar determinadas operaciones:
-
-    Añadir cliente. Esta opción pedirá los datos del cliente y añadirá el registro correspondiente en el fichero.
-    Listar clientes. Recorrerá el fichero mostrando los clientes almacenados en el mismo.
-    Buscar clientes. Pedirá al usuario el nif del cliente a buscar, y comprobará si existe en el fichero.
-    Borrar cliente. Pedirá al usuario el nif del cliente a borrar, y si existe, lo borrará del fichero.
-    Borrar fichero de clientes completamente. Elimina del disco el fichero clientes.dat
-    Salir de la aplicación.
-
-  */
 public class Solicitudes {
   Scanner leer = new Scanner(System.in);
-  
-  
-  
-  
- 
-  
   
   public String menu(){   
     System.out.println("Operaciones con clientes");
@@ -51,11 +22,6 @@ public class Solicitudes {
     String opcion = leer.nextLine();
     return opcion;
   }
-  public void addCliente() throws FileNotFoundException, IOException{    
-    
-    
-    
-  }  
   public String pedirNIF(){
     String nif;
     do{
@@ -132,7 +98,79 @@ public class Solicitudes {
     iterador = lista.listIterator();
     while(iterador.hasNext()){
       Cliente cliente = (Cliente) iterador.next();
-      System.out.println(cliente.getNombre());
+      System.out.print("cliente:" + cliente.getNombre());
+      System.out.print(", nif:" + cliente.getNif());
+      System.out.print(", dirección:" + cliente.getDireccion());
+      System.out.print(", tfno.:" + cliente.getTelefono());
+      System.out.print(", deuda:" + cliente.getDeuda() + "\n");
     }
+  }
+  public void buscarNIF(List lista, String nif){
+    ListIterator iterador;
+    boolean encontrado = false;
+    // creamos el iterador para movernos por la lista
+    iterador = lista.listIterator();
+    while(iterador.hasNext()){
+      Cliente cliente = (Cliente) iterador.next();
+      if (cliente.getNif().equals(nif)){
+        System.out.println("Se han encontrado los datos del nif " + nif);
+        System.out.print("cliente:" + cliente.getNombre());
+        System.out.print(", dirección:" + cliente.getDireccion());
+        System.out.print(", tfno.:" + cliente.getTelefono());
+        System.out.print(", deuda:" + cliente.getDeuda() + "\n");
+        encontrado = true;
+      }      
+    }
+    if (!encontrado){
+      System.out.println("No se ha encontrado el nif " + nif);
+    }
+  }
+  public List borrarNIF(List lista, String nif){
+    ListIterator iterador;
+    boolean encontrado = false;
+    iterador = lista.listIterator();
+    while(iterador.hasNext()){
+      Cliente cliente = (Cliente) iterador.next();
+      if (cliente.getNif().equals(nif)){
+        // visualizamos los datos antes de borrarlo
+        System.out.println("Se han encontrado los datos del nif " + nif);
+        System.out.print("cliente:" + cliente.getNombre());
+        System.out.print(", dirección:" + cliente.getDireccion());
+        System.out.print(", tfno.:" + cliente.getTelefono());
+        System.out.print(", deuda:" + cliente.getDeuda() + "\n");
+        //borramos el registro en el que estamos en este momento
+        iterador.remove();
+        System.out.println("Registro borrado.");
+        encontrado = true;
+      }
+    }
+    if (!encontrado){
+      System.out.println("No se ha encontrado el nif " + nif);
+    }
+    // devolvemos la lista con el registro borrado para guardarla en disco
+    return lista;
+  }
+  public boolean borrarFichero(String nombreFichero){
+    String opcion = null;
+    boolean borrado;
+    // creamos el objeto fichero que hemos pasado como parámetro
+    File fich = new File(nombreFichero);
+    if (!fich.exists()){
+      System.out.println("El fichero " + nombreFichero + " no existe.");
+      borrado = false;
+    }else{
+      System.out.println("¿Desea borrar el fichero " + nombreFichero + "?(escribe \"yes\" para borrarlo)");
+      opcion = leer.nextLine();
+      if (opcion.equals("yes")){
+        // borramos el fichero
+        fich.delete();
+        System.out.println("El fichero " + nombreFichero + " ha sido borrado.");
+        borrado = true;
+      }else{
+        System.out.println("El fichero " + nombreFichero + " NO se ha borrado.");
+        borrado = false;
+      };
+    }
+    return borrado;
   }
 }
